@@ -1,0 +1,20 @@
+{
+  "appTitle": "Aire de Jeux Tactile",
+  "chooseShape": "Choisis une forme",
+  "animalsCategory": "Catégorie Animaux",
+  "dog": "Chien",
+  "cat": "Chat",
+  "bird": "Oiseau",
+  "rabbit": "Lapin",
+  "elephant": "Éléphant",
+  "lion": "Lion",
+  "play": "Jouer",
+  "gallery": "Galerie",
+  "done": "Terminé",
+  "chooseColor": "Choisis une couleur",
+  "greatJob": "Bon travail !",
+  "youDidIt": "Tu as créé quelque chose de magnifique !",
+  "save": "Enregistrer",
+  "share": "Partager",
+  "newDrawing": "Nouveau dessin"
+}

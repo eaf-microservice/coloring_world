@@ -1,0 +1,20 @@
+{
+  "appTitle": "Tactile Playground",
+  "chooseShape": "اختر شكلاً",
+  "animalsCategory": "فئة الحيوانات",
+  "dog": "كلب",
+  "cat": "قطة",
+  "bird": "عصفور",
+  "rabbit": "أرنب",
+  "elephant": "فيل",
+  "lion": "أسد",
+  "play": "العب",
+  "gallery": "المعرض",
+  "done": "تم",
+  "chooseColor": "اختر لوناً",
+  "greatJob": "عمل رائع!",
+  "youDidIt": "لقد أبدعت في تلوين هذه الرسمة",
+  "save": "حفظ",
+  "share": "مشاركة",
+  "newDrawing": "رسمة جديدة"
+}
