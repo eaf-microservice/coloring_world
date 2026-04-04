@@ -1,27 +1,47 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import '../l10n/app_localizations.dart';
 import '../models/coloring_shape.dart';
 import '../theme.dart';
 
-class GalleryScreen extends StatelessWidget {
-  const GalleryScreen({super.key});
+class GalleryScreen extends StatefulWidget {
+  final String? category;
+  const GalleryScreen({super.key, this.category});
+
+  @override
+  State<GalleryScreen> createState() => _GalleryScreenState();
+}
+
+class _GalleryScreenState extends State<GalleryScreen> {
+  late String selectedCategory;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedCategory = widget.category ?? 'animals';
+  }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
 
+    // Filter shapes by category
+    final filteredShapes = sampleShapes
+        .where((shape) => shape.category == selectedCategory)
+        .toList();
+
     return Scaffold(
       backgroundColor: AppTheme.surface,
       appBar: AppBar(
-        backgroundColor: Colors.white.withOpacity(0.8),
+        backgroundColor: Colors.white.withValues(alpha: 0.8),
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppTheme.primary),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          l10n.appTitle,
+          l10n.translate('appTitle'),
           style: const TextStyle(
             fontStyle: FontStyle.italic,
             fontWeight: FontWeight.w900,
@@ -37,32 +57,50 @@ class GalleryScreen extends StatelessWidget {
         child: Column(
           children: [
             Text(
-              l10n.chooseShape,
+              l10n.translate('chooseShape'),
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.w900,
-                    fontSize: 32,
-                  ),
-            ),
-            const SizedBox(height: 8),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              decoration: BoxDecoration(
-                color: colorScheme.secondaryContainer,
-                borderRadius: BorderRadius.circular(24),
+                fontWeight: FontWeight.w900,
+                fontSize: 32,
               ),
+            ),
+            const SizedBox(height: 24),
+            // Category Tabs
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
               child: Row(
-                mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.pets, size: 18),
-                  const SizedBox(width: 8),
-                  Text(
-                    l10n.animalsCategory,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  _CategoryTab(
+                    label: l10n.translate('animalsCategory'),
+                    isSelected: selectedCategory == 'animals',
+                    onTap: () {
+                      setState(() => selectedCategory = 'animals');
+                    },
+                  ),
+                  _CategoryTab(
+                    label: l10n.translate('vehiclesCategory'),
+                    isSelected: selectedCategory == 'vehicles',
+                    onTap: () {
+                      setState(() => selectedCategory = 'vehicles');
+                    },
+                  ),
+                  _CategoryTab(
+                    label: l10n.translate('spaceCategory'),
+                    isSelected: selectedCategory == 'space',
+                    onTap: () {
+                      setState(() => selectedCategory = 'space');
+                    },
+                  ),
+                  _CategoryTab(
+                    label: l10n.translate('shapesCategory'),
+                    isSelected: selectedCategory == 'shapes',
+                    onTap: () {
+                      setState(() => selectedCategory = 'shapes');
+                    },
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: 24),
             GridView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -72,13 +110,52 @@ class GalleryScreen extends StatelessWidget {
                 mainAxisSpacing: 16,
                 childAspectRatio: 0.85,
               ),
-              itemCount: sampleShapes.length,
+              itemCount: filteredShapes.length,
               itemBuilder: (context, index) {
-                final shape = sampleShapes[index];
+                final shape = filteredShapes[index];
                 return _ShapeCard(shape: shape);
               },
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _CategoryTab extends StatelessWidget {
+  final String label;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const _CategoryTab({
+    required this.label,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 8.0),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(24),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          decoration: BoxDecoration(
+            color: isSelected
+                ? AppTheme.primary
+                : Theme.of(context).colorScheme.secondaryContainer,
+            borderRadius: BorderRadius.circular(24),
+          ),
+          child: Text(
+            label,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: isSelected ? Colors.white : AppTheme.onSurfaceVariant,
+            ),
+          ),
         ),
       ),
     );
@@ -94,17 +171,9 @@ class _ShapeCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
 
-    // Map shape name keys to localized strings
+    // Use translate to get localized name
     String getName() {
-      switch (shape.nameKey) {
-        case 'dog': return l10n.dog;
-        case 'cat': return l10n.cat;
-        case 'bird': return l10n.bird;
-        case 'rabbit': return l10n.rabbit;
-        case 'elephant': return l10n.elephant;
-        case 'lion': return l10n.lion;
-        default: return shape.nameKey;
-      }
+      return l10n.translate(shape.nameKey);
     }
 
     return InkWell(
@@ -117,7 +186,7 @@ class _ShapeCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.03),
+              color: Colors.black.withValues(alpha: 0.03),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -134,10 +203,7 @@ class _ShapeCard extends StatelessWidget {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(12.0),
-                  child: Image.network(
-                    shape.imageUrl,
-                    fit: BoxFit.contain,
-                  ),
+                  child: _BuildImageFromUrl(imageUrl: shape.imageUrl),
                 ),
               ),
             ),
@@ -147,12 +213,15 @@ class _ShapeCard extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    getName(),
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      color: AppTheme.onSurfaceVariant,
+                  Expanded(
+                    child: Text(
+                      getName(),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                        color: AppTheme.onSurfaceVariant,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   Container(
@@ -162,7 +231,11 @@ class _ShapeCard extends StatelessWidget {
                       color: AppTheme.primaryContainer,
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(Icons.brush, size: 16, color: AppTheme.onPrimaryContainer),
+                    child: const Icon(
+                      Icons.brush,
+                      size: 16,
+                      color: AppTheme.onPrimaryContainer,
+                    ),
                   ),
                 ],
               ),
@@ -170,6 +243,20 @@ class _ShapeCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _BuildImageFromUrl extends StatelessWidget {
+  final String imageUrl;
+  const _BuildImageFromUrl({required this.imageUrl});
+
+  @override
+  Widget build(BuildContext context) {
+    return SvgPicture.asset(
+      imageUrl,
+      fit: BoxFit.contain,
+      colorFilter: const ColorFilter.mode(Colors.black, BlendMode.srcIn),
     );
   }
 }

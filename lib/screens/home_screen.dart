@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../l10n/app_localizations.dart';
 import '../theme.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -13,7 +13,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppTheme.surface,
       appBar: AppBar(
-        backgroundColor: Colors.white.withOpacity(0.8),
+        backgroundColor: Colors.white.withValues(alpha: 0.8),
         elevation: 0,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(32)),
@@ -23,10 +23,10 @@ class HomeScreen extends StatelessWidget {
             Icon(Icons.star, color: colorScheme.primaryContainer),
             const SizedBox(width: 8),
             Text(
-              l10n.appTitle,
+              l10n.translate('appTitle'),
               style: const TextStyle(
                 fontStyle: FontStyle.italic,
-                fontWeight: FontWeight.w900,
+                fontWeight: FontWeight.w800,
                 color: AppTheme.primaryContainer,
               ),
             ),
@@ -53,7 +53,7 @@ class HomeScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(32),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withValues(alpha: 0.1),
                     blurRadius: 20,
                     offset: const Offset(0, 10),
                   ),
@@ -68,7 +68,8 @@ class HomeScreen extends StatelessWidget {
                       children: [
                         Text(
                           "Ready to create?",
-                          style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                          style: Theme.of(context).textTheme.displaySmall
+                              ?.copyWith(
                                 color: colorScheme.onPrimaryContainer,
                                 fontWeight: FontWeight.w800,
                               ),
@@ -77,19 +78,28 @@ class HomeScreen extends StatelessWidget {
                         Text(
                           "Pick a world and start your colorful adventure today!",
                           style: TextStyle(
-                            color: colorScheme.onPrimaryContainer.withOpacity(0.8),
+                            color: colorScheme.onPrimaryContainer.withValues(
+                              alpha: 0.8,
+                            ),
                             fontSize: 16,
                           ),
                         ),
                         const SizedBox(height: 24),
                         ElevatedButton.icon(
-                          onPressed: () => Navigator.pushNamed(context, '/gallery'),
+                          onPressed: () =>
+                              Navigator.pushNamed(context, '/free-drawing'),
                           icon: const Icon(Icons.play_circle, size: 32),
-                          label: Text(l10n.play, style: const TextStyle(fontSize: 20)),
+                          label: Text(
+                            l10n.translate('play'),
+                            style: const TextStyle(fontSize: 20),
+                          ),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
                             foregroundColor: colorScheme.primary,
-                            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 32,
+                              vertical: 16,
+                            ),
                           ),
                         ),
                       ],
@@ -116,35 +126,51 @@ class HomeScreen extends StatelessWidget {
                   subtitle: "Lions, Birds & More",
                   icon: Icons.pets,
                   color: colorScheme.secondaryContainer,
-                  onTap: () => Navigator.pushNamed(context, '/gallery'),
+                  onTap: () => Navigator.pushNamed(
+                    context,
+                    '/gallery',
+                    arguments: 'animals',
+                  ),
                 ),
                 _CategoryCard(
                   title: "Vehicles",
                   subtitle: "Cars & Planes",
                   icon: Icons.directions_car,
                   color: colorScheme.tertiaryContainer,
-                  onTap: () {},
+                  onTap: () => Navigator.pushNamed(
+                    context,
+                    '/gallery',
+                    arguments: 'vehicles',
+                  ),
                 ),
                 _CategoryCard(
                   title: "Space",
                   subtitle: "Rockets & Stars",
                   icon: Icons.rocket_launch,
                   color: Colors.indigo.shade100,
-                  onTap: () {},
+                  onTap: () => Navigator.pushNamed(
+                    context,
+                    '/gallery',
+                    arguments: 'space',
+                  ),
                 ),
                 _CategoryCard(
                   title: "Shapes",
                   subtitle: "Circles & Squares",
                   icon: Icons.category,
                   color: colorScheme.surfaceVariant,
-                  onTap: () {},
+                  onTap: () => Navigator.pushNamed(
+                    context,
+                    '/gallery',
+                    arguments: 'shapes',
+                  ),
                 ),
               ],
             ),
           ],
         ),
       ),
-      bottomNavigationBar: _BottomNavBar(currentIndex: 0),
+      //bottomNavigationBar: _BottomNavBar(currentIndex: 0),
     );
   }
 }
@@ -192,13 +218,16 @@ class _CategoryCard extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 18),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w900,
+                    fontSize: 18,
+                  ),
                 ),
                 Text(
                   subtitle,
                   style: TextStyle(
                     fontSize: 12,
-                    color: Colors.black.withOpacity(0.5),
+                    color: Colors.black.withValues(alpha: 0.5),
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -211,92 +240,97 @@ class _CategoryCard extends StatelessWidget {
   }
 }
 
-class _BottomNavBar extends StatelessWidget {
-  final int currentIndex;
-  const _BottomNavBar({required this.currentIndex});
+// class _BottomNavBar extends StatelessWidget {
+//   final int currentIndex;
+//   const _BottomNavBar({required this.currentIndex});
 
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    return Container(
-      height: 100,
-      padding: const EdgeInsets.only(bottom: 16),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.9),
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(48)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 20,
-            offset: const Offset(0, -5),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _NavBarItem(
-            icon: Icons.play_arrow,
-            label: l10n.play,
-            isActive: currentIndex == 0,
-            onTap: () => Navigator.pushReplacementNamed(context, '/'),
-          ),
-          _NavBarItem(
-            icon: Icons.photo_library,
-            label: l10n.gallery,
-            isActive: currentIndex == 1,
-            onTap: () => Navigator.pushNamed(context, '/gallery'),
-          ),
-        ],
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     final l10n = AppLocalizations.of(context)!;
+//     return Container(
+//       height: 100,
+//       padding: const EdgeInsets.only(bottom: 16),
+//       decoration: BoxDecoration(
+//         color: Colors.white.withValues(alpha: 0.9),
+//         borderRadius: const BorderRadius.vertical(top: Radius.circular(48)),
+//         boxShadow: [
+//           BoxShadow(
+//             color: Colors.black.withValues(alpha: 0.05),
+//             blurRadius: 20,
+//             offset: const Offset(0, -5),
+//           ),
+//         ],
+//       ),
+//       child: Row(
+//         mainAxisAlignment: MainAxisAlignment.spaceAround,
+//         children: [
+//           _NavBarItem(
+//             icon: Icons.play_arrow,
+//             label: l10n.translate('play'),
+//             isActive: currentIndex == 0,
+//             onTap: () => Navigator.pushReplacementNamed(context, '/'),
+//           ),
+//           _NavBarItem(
+//             icon: Icons.photo_library,
+//             label: l10n.translate('gallery'),
+//             isActive: currentIndex == 1,
+//             onTap: () => Navigator.pushNamed(context, '/gallery'),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
 
-class _NavBarItem extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final bool isActive;
-  final VoidCallback onTap;
+// class _NavBarItem extends StatelessWidget {
+//   final IconData icon;
+//   final String label;
+//   final bool isActive;
+//   final VoidCallback onTap;
 
-  const _NavBarItem({
-    required this.icon,
-    required this.label,
-    required this.isActive,
-    required this.onTap,
-  });
+//   const _NavBarItem({
+//     required this.icon,
+//     required this.label,
+//     required this.isActive,
+//     required this.onTap,
+//   });
 
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return InkWell(
-      onTap: onTap,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: isActive ? 24 : 12, vertical: 8),
-            decoration: BoxDecoration(
-              color: isActive ? colorScheme.primaryContainer : Colors.transparent,
-              borderRadius: BorderRadius.circular(24),
-            ),
-            child: Icon(
-              icon,
-              color: isActive ? Colors.white : Colors.grey,
-              size: 28,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-              color: isActive ? colorScheme.onSurface : Colors.grey,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     final colorScheme = Theme.of(context).colorScheme;
+//     return InkWell(
+//       onTap: onTap,
+//       child: Column(
+//         mainAxisSize: MainAxisSize.min,
+//         children: [
+//           Container(
+//             padding: EdgeInsets.symmetric(
+//               horizontal: isActive ? 24 : 12,
+//               vertical: 8,
+//             ),
+//             decoration: BoxDecoration(
+//               color: isActive
+//                   ? colorScheme.primaryContainer
+//                   : Colors.transparent,
+//               borderRadius: BorderRadius.circular(24),
+//             ),
+//             child: Icon(
+//               icon,
+//               color: isActive ? Colors.white : Colors.grey,
+//               size: 28,
+//             ),
+//           ),
+//           const SizedBox(height: 4),
+//           Text(
+//             label,
+//             style: TextStyle(
+//               fontSize: 12,
+//               fontWeight: FontWeight.bold,
+//               color: isActive ? colorScheme.onSurface : Colors.grey,
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }

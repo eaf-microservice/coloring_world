@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../l10n/app_localizations.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -14,11 +14,10 @@ class SuccessScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
-
     return Scaffold(
       backgroundColor: AppTheme.surfaceContainerLow,
       appBar: AppBar(
-        backgroundColor: Colors.white.withOpacity(0.8),
+        backgroundColor: Colors.white.withValues(alpha: 0.8),
         elevation: 0,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(32)),
@@ -28,7 +27,7 @@ class SuccessScreen extends StatelessWidget {
             Icon(Icons.star, color: colorScheme.primaryContainer),
             const SizedBox(width: 8),
             Text(
-              l10n.appTitle,
+              l10n.translate('appTitle'),
               style: const TextStyle(
                 fontStyle: FontStyle.italic,
                 fontWeight: FontWeight.w900,
@@ -37,13 +36,7 @@ class SuccessScreen extends StatelessWidget {
             ),
           ],
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.person, color: AppTheme.primary),
-            onPressed: () {},
-          ),
-          const SizedBox(width: 8),
-        ],
+        
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
@@ -58,11 +51,15 @@ class SuccessScreen extends StatelessWidget {
                     color: AppTheme.primaryContainer,
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(Icons.celebration, size: 48, color: AppTheme.onPrimaryContainer),
+                  child: const Icon(
+                    Icons.celebration,
+                    size: 48,
+                    color: AppTheme.onPrimaryContainer,
+                  ),
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  l10n.greatJob,
+                  l10n.translate('greatJob'),
                   style: const TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.w900,
@@ -70,7 +67,7 @@ class SuccessScreen extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  l10n.youDidIt,
+                  l10n.translate('youDidIt'),
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -88,7 +85,7 @@ class SuccessScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(24),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withValues(alpha: 0.1),
                     blurRadius: 30,
                     offset: const Offset(0, 10),
                   ),
@@ -96,10 +93,7 @@ class SuccessScreen extends StatelessWidget {
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(16),
-                child: Image.file(
-                  File(imagePath),
-                  fit: BoxFit.cover,
-                ),
+                child: Image.file(File(imagePath), fit: BoxFit.cover),
               ),
             ),
             const SizedBox(height: 48),
@@ -108,7 +102,7 @@ class SuccessScreen extends StatelessWidget {
               children: [
                 Expanded(
                   child: _ActionButton(
-                    label: l10n.save,
+                    label: l10n.translate('save'),
                     icon: Icons.photo_camera,
                     color: AppTheme.primaryContainer,
                     onTap: () => _saveToGallery(context),
@@ -117,7 +111,7 @@ class SuccessScreen extends StatelessWidget {
                 const SizedBox(width: 16),
                 Expanded(
                   child: _ActionButton(
-                    label: l10n.share,
+                    label: l10n.translate('share'),
                     icon: Icons.share,
                     color: AppTheme.secondaryContainer,
                     onTap: () => _shareArtwork(context),
@@ -129,9 +123,19 @@ class SuccessScreen extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
-                onPressed: () => Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false),
+                onPressed: () => Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  '/',
+                  (route) => false,
+                ),
                 icon: const Icon(Icons.brush, size: 28),
-                label: Text(l10n.newDrawing, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900)),
+                label: Text(
+                  l10n.translate('newDrawing'),
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppTheme.tertiaryContainer,
                   foregroundColor: AppTheme.onTertiaryContainer,
@@ -151,20 +155,26 @@ class SuccessScreen extends StatelessWidget {
       final result = await ImageGallerySaverPlus.saveFile(imagePath);
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(result['isSuccess'] ? 'Saved to Gallery!' : 'Failed to save')),
+          SnackBar(
+            content: Text(
+              result['isSuccess'] ? 'Saved to Gallery!' : 'Failed to save',
+            ),
+          ),
         );
       }
     } else {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Permission denied')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Permission denied')));
       }
     }
   }
 
   Future<void> _shareArtwork(BuildContext context) async {
-    await Share.shareXFiles([XFile(imagePath)], text: 'Check out my masterpiece!');
+    await Share.shareXFiles([
+      XFile(imagePath),
+    ], text: 'Check out my masterpiece!');
   }
 }
 
@@ -196,7 +206,10 @@ class _ActionButton extends StatelessWidget {
           children: [
             Icon(icon, size: 32),
             const SizedBox(height: 4),
-            Text(label, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+            Text(
+              label,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ),
           ],
         ),
       ),
