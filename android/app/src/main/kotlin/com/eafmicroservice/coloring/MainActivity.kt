@@ -1,4 +1,4 @@
-package com.eafmicroservice.coloring
+package com.eafmicroservice.coloring_world
 
 import io.flutter.embedding.android.FlutterActivity
 
