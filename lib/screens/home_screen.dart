@@ -133,6 +133,39 @@ class HomeScreen extends StatelessWidget {
               crossAxisSpacing: 16,
               children: [
                 _CategoryCard(
+                  title: l10n.translate('arabicAlphabetCategory'),
+                  subtitle: l10n.translate('arabicAlphabetSubtitle'),
+                  icon: Icons.description,
+                  color: Colors.green.shade100,
+                  onTap: () => Navigator.pushNamed(
+                    context,
+                    '/gallery',
+                    arguments: 'arabic_alphabet',
+                  ),
+                ),
+                _CategoryCard(
+                  title: l10n.translate('englishAlphabetCategory'),
+                  subtitle: l10n.translate('englishAlphabetSubtitle'),
+                  icon: Icons.text_fields,
+                  color: Colors.amber.shade100,
+                  onTap: () => Navigator.pushNamed(
+                    context,
+                    '/gallery',
+                    arguments: 'english_alphabet',
+                  ),
+                ),
+                _CategoryCard(
+                  title: l10n.translate('numbersCategory'),
+                  subtitle: l10n.translate('numbersSubtitle'),
+                  icon: Icons.numbers,
+                  color: Colors.orange.shade100,
+                  onTap: () => Navigator.pushNamed(
+                    context,
+                    '/gallery',
+                    arguments: 'numbers',
+                  ),
+                ),
+                _CategoryCard(
                   title: l10n.translate('animalsCategory'),
                   subtitle: l10n.translate('animalsSubtitle'),
                   icon: Icons.pets,
@@ -169,7 +202,7 @@ class HomeScreen extends StatelessWidget {
                   title: l10n.translate('shapesCategory'),
                   subtitle: l10n.translate('shapesSubtitle'),
                   icon: Icons.category,
-                  color: colorScheme.surfaceVariant,
+                  color: colorScheme.surfaceContainerHighest,
                   onTap: () => Navigator.pushNamed(
                     context,
                     '/gallery',

@@ -71,6 +71,28 @@ class _GalleryScreenState extends State<GalleryScreen> {
               child: Row(
                 children: [
                   _CategoryTab(
+                    label: l10n.translate('arabicAlphabetCategory'),
+                    isSelected: selectedCategory == 'arabic_alphabet',
+                    onTap: () {
+                      setState(() => selectedCategory = 'arabic_alphabet');
+                    },
+                  ),
+                  _CategoryTab(
+                    label: l10n.translate('englishAlphabetCategory'),
+                    isSelected: selectedCategory == 'english_alphabet',
+                    onTap: () {
+                      setState(() => selectedCategory = 'english_alphabet');
+                    },
+                  ),
+                  _CategoryTab(
+                    label: l10n.translate('numbersCategory'),
+                    isSelected: selectedCategory == 'numbers',
+                    onTap: () {
+                      setState(() => selectedCategory = 'numbers');
+                    },
+                  ),
+                  //==============================================
+                  _CategoryTab(
                     label: l10n.translate('animalsCategory'),
                     isSelected: selectedCategory == 'animals',
                     onTap: () {
@@ -256,10 +278,16 @@ class _BuildImageFromUrl extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SvgPicture.asset(
-      imageUrl,
-      fit: BoxFit.contain,
-      colorFilter: const ColorFilter.mode(Colors.black, BlendMode.srcIn),
-    );
+    // Check file extension to determine how to load
+    if (imageUrl.endsWith('.svg')) {
+      return SvgPicture.asset(
+        imageUrl,
+        fit: BoxFit.contain,
+        colorFilter: const ColorFilter.mode(Colors.black, BlendMode.srcIn),
+      );
+    } else {
+      // For PNG and other image formats
+      return Image.asset(imageUrl, fit: BoxFit.contain);
+    }
   }
 }

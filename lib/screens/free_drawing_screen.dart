@@ -252,7 +252,7 @@ class _FreeDrawingScreenState extends State<FreeDrawingScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 4),
               child: ElevatedButton.icon(
                 onPressed: _clearCanvas,
-                icon: const Icon(Icons.refresh, size: 20),
+                icon: const Icon(Icons.clear, size: 20),
                 label: Text(
                   l10n.translate('clear'),
                   style: const TextStyle(fontSize: 12),
@@ -296,62 +296,62 @@ class _FreeDrawingScreenState extends State<FreeDrawingScreen> {
       body: Column(
         children: [
           // Zoom Controls
-          Container(
-            color: Colors.white,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  onPressed: _zoomOut,
-                  icon: Icon(
-                    Icons.zoom_out,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  tooltip: 'Zoom Out',
-                ),
-                Text(
-                  '${(_zoomLevel * 100).toStringAsFixed(0)}%',
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                IconButton(
-                  onPressed: _zoomIn,
-                  icon: Icon(
-                    Icons.zoom_in,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  tooltip: 'Zoom In',
-                ),
-                const SizedBox(width: 16),
-                IconButton(
-                  onPressed: _resetZoom,
-                  icon: const Icon(Icons.refresh, color: Colors.blue),
-                  tooltip: 'Reset Zoom',
-                ),
-                // const SizedBox(width: 24),
-                // // Current color indicator
-                // Container(
-                //   padding: const EdgeInsets.symmetric(
-                //     horizontal: 12,
-                //     vertical: 6,
-                //   ),
-                //   decoration: BoxDecoration(
-                //     color: _selectedColor,
-                //     borderRadius: BorderRadius.circular(12),
-                //     border: Border.all(color: Colors.grey.shade300, width: 2),
-                //   ),
-                //   child: const Icon(
-                //     Icons.palette,
-                //     color: Colors.white,
-                //     size: 20,
-                //   ),
-                // ),
-              ],
-            ),
-          ),
+          // Container(
+          //   color: Colors.white,
+          //   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          //   child: Row(
+          //     mainAxisAlignment: MainAxisAlignment.center,
+          //     children: [
+          //       IconButton(
+          //         onPressed: _zoomOut,
+          //         icon: Icon(
+          //           Icons.zoom_out,
+          //           color: Theme.of(context).colorScheme.primary,
+          //         ),
+          //         tooltip: 'Zoom Out',
+          //       ),
+          //       Text(
+          //         '${(_zoomLevel * 100).toStringAsFixed(0)}%',
+          //         style: const TextStyle(
+          //           fontSize: 14,
+          //           fontWeight: FontWeight.bold,
+          //         ),
+          //       ),
+          //       IconButton(
+          //         onPressed: _zoomIn,
+          //         icon: Icon(
+          //           Icons.zoom_in,
+          //           color: Theme.of(context).colorScheme.primary,
+          //         ),
+          //         tooltip: 'Zoom In',
+          //       ),
+          //       const SizedBox(width: 16),
+          //       IconButton(
+          //         onPressed: _resetZoom,
+          //         icon: const Icon(Icons.refresh, color: Colors.blue),
+          //         tooltip: 'Reset Zoom',
+          //       ),
+          //       // const SizedBox(width: 24),
+          //       // // Current color indicator
+          //       // Container(
+          //       //   padding: const EdgeInsets.symmetric(
+          //       //     horizontal: 12,
+          //       //     vertical: 6,
+          //       //   ),
+          //       //   decoration: BoxDecoration(
+          //       //     color: _selectedColor,
+          //       //     borderRadius: BorderRadius.circular(12),
+          //       //     border: Border.all(color: Colors.grey.shade300, width: 2),
+          //       //   ),
+          //       //   child: const Icon(
+          //       //     Icons.palette,
+          //       //     color: Colors.white,
+          //       //     size: 20,
+          //       //   ),
+          //       // ),
+          //     ],
+          //   ),
+          // ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(16.0),

@@ -1,6 +1,6 @@
 # Coloring World 🎨
 
-A delightful, kid-friendly coloring app built with Flutter that lets children create beautiful artwork with intuitive drawing and panning features.
+A delightful, kid-friendly coloring application that lets children create beautiful artwork with intuitive drawing and panning features.
 
 ## Features ✨
 
