@@ -32,20 +32,21 @@ class _GalleryScreenState extends State<GalleryScreen> {
         .toList();
 
     return Scaffold(
-      backgroundColor: AppTheme.surface,
+      backgroundColor: colorScheme.surface,
       appBar: AppBar(
         backgroundColor: Colors.white.withValues(alpha: 0.8),
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppTheme.primary),
+          icon: Icon(Icons.arrow_back, color: colorScheme.primary),
           onPressed: () => Navigator.pop(context),
         ),
+        centerTitle: true,
         title: Text(
           l10n.translate('appTitle'),
-          style: const TextStyle(
+          style: TextStyle(
             fontStyle: FontStyle.italic,
             fontWeight: FontWeight.w900,
-            color: AppTheme.primaryContainer,
+            color: colorScheme.primaryContainer,
           ),
         ),
         shape: const RoundedRectangleBorder(
@@ -145,7 +146,7 @@ class _CategoryTab extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           decoration: BoxDecoration(
             color: isSelected
-                ? AppTheme.primary
+                ? Theme.of(context).colorScheme.primary
                 : Theme.of(context).colorScheme.secondaryContainer,
             borderRadius: BorderRadius.circular(24),
           ),
@@ -153,7 +154,9 @@ class _CategoryTab extends StatelessWidget {
             label,
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              color: isSelected ? Colors.white : AppTheme.onSurfaceVariant,
+              color: isSelected
+                  ? Colors.white
+                  : Theme.of(context).colorScheme.onSurfaceVariant,
             ),
           ),
         ),
@@ -182,7 +185,7 @@ class _ShapeCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: AppTheme.surfaceContainerLow,
+          color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.5),
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
@@ -216,10 +219,10 @@ class _ShapeCard extends StatelessWidget {
                   Expanded(
                     child: Text(
                       getName(),
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 14,
-                        color: AppTheme.onSurfaceVariant,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -227,14 +230,14 @@ class _ShapeCard extends StatelessWidget {
                   Container(
                     width: 32,
                     height: 32,
-                    decoration: const BoxDecoration(
-                      color: AppTheme.primaryContainer,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.primaryContainer,
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.brush,
                       size: 16,
-                      color: AppTheme.onPrimaryContainer,
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
                     ),
                   ),
                 ],

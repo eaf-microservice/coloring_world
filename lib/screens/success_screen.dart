@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
-import 'package:permission_handler/permission_handler.dart';
 import '../theme.dart';
 
 class SuccessScreen extends StatelessWidget {
@@ -15,28 +14,38 @@ class SuccessScreen extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: AppTheme.surfaceContainerLow,
+      backgroundColor: colorScheme.surface.withValues(alpha: 0.5),
       appBar: AppBar(
         backgroundColor: Colors.white.withValues(alpha: 0.8),
         elevation: 0,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(32)),
         ),
-        title: Row(
-          children: [
-            Icon(Icons.star, color: colorScheme.primaryContainer),
-            const SizedBox(width: 8),
-            Text(
-              l10n.translate('appTitle'),
-              style: const TextStyle(
-                fontStyle: FontStyle.italic,
-                fontWeight: FontWeight.w900,
-                color: AppTheme.primaryContainer,
-              ),
-            ),
-          ],
+        centerTitle: true,
+        title: Text(
+          l10n.translate('appTitle'),
+          style: TextStyle(
+            fontStyle: FontStyle.italic,
+            fontWeight: FontWeight.w900,
+            color: colorScheme.primaryContainer,
+          ),
         ),
-        
+        // title: Row(
+        //   mainAxisAlignment: MainAxisAlignment.center,
+        //   crossAxisAlignment: CrossAxisAlignment.center,
+        //   children: [
+        //     Icon(Icons.star, color: colorScheme.primaryContainer),
+        //     const SizedBox(width: 8),
+        //     Text(
+        //       l10n.translate('appTitle'),
+        //       style: TextStyle(
+        //         fontStyle: FontStyle.italic,
+        //         fontWeight: FontWeight.w900,
+        //         color: colorScheme.primaryContainer,
+        //       ),
+        //     ),
+        //   ],
+        // ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
@@ -47,31 +56,31 @@ class SuccessScreen extends StatelessWidget {
               children: [
                 Container(
                   padding: const EdgeInsets.all(16),
-                  decoration: const BoxDecoration(
-                    color: AppTheme.primaryContainer,
+                  decoration: BoxDecoration(
+                    color: colorScheme.primaryContainer,
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.celebration,
                     size: 48,
-                    color: AppTheme.onPrimaryContainer,
+                    color: colorScheme.onPrimaryContainer,
                   ),
                 ),
                 const SizedBox(height: 16),
                 Text(
                   l10n.translate('greatJob'),
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.w900,
-                    color: AppTheme.primary,
+                    color: colorScheme.primary,
                   ),
                 ),
                 Text(
                   l10n.translate('youDidIt'),
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: AppTheme.onSurfaceVariant,
+                    color: colorScheme.onSurfaceVariant,
                   ),
                 ),
               ],
@@ -104,7 +113,7 @@ class SuccessScreen extends StatelessWidget {
                   child: _ActionButton(
                     label: l10n.translate('save'),
                     icon: Icons.photo_camera,
-                    color: AppTheme.primaryContainer,
+                    color: colorScheme.primaryContainer,
                     onTap: () => _saveToGallery(context),
                   ),
                 ),
@@ -113,7 +122,7 @@ class SuccessScreen extends StatelessWidget {
                   child: _ActionButton(
                     label: l10n.translate('share'),
                     icon: Icons.share,
-                    color: AppTheme.secondaryContainer,
+                    color: colorScheme.secondaryContainer,
                     onTap: () => _shareArtwork(context),
                   ),
                 ),
@@ -137,8 +146,8 @@ class SuccessScreen extends StatelessWidget {
                   ),
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTheme.tertiaryContainer,
-                  foregroundColor: AppTheme.onTertiaryContainer,
+                  backgroundColor: colorScheme.tertiaryContainer,
+                  foregroundColor: colorScheme.onTertiaryContainer,
                   padding: const EdgeInsets.symmetric(vertical: 20),
                 ),
               ),
@@ -150,23 +159,33 @@ class SuccessScreen extends StatelessWidget {
   }
 
   Future<void> _saveToGallery(BuildContext context) async {
-    final status = await Permission.photos.request();
-    if (status.isGranted) {
+    try {
+      // Try to save directly - for app-specific directories
       final result = await ImageGallerySaverPlus.saveFile(imagePath);
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              result['isSuccess'] ? 'Saved to Gallery!' : 'Failed to save',
+              result['isSuccess']
+                  ? AppLocalizations.of(context)!.translate('save_to_gallery')
+                  : 'Error saving image',
             ),
+            duration: const Duration(seconds: 3),
           ),
         );
       }
-    } else {
+    } catch (e) {
       if (context.mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('Permission denied')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Could not save: $e'),
+            duration: const Duration(seconds: 3),
+            action: SnackBarAction(
+              label: 'Share Instead',
+              onPressed: () => _shareArtwork(context),
+            ),
+          ),
+        );
       }
     }
   }

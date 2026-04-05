@@ -11,31 +11,42 @@ class HomeScreen extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: AppTheme.surface,
+      backgroundColor: colorScheme.surface,
       appBar: AppBar(
         backgroundColor: Colors.white.withValues(alpha: 0.8),
         elevation: 0,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(32)),
         ),
-        title: Row(
-          children: [
-            Icon(Icons.star, color: colorScheme.primaryContainer),
-            const SizedBox(width: 8),
-            Text(
-              l10n.translate('appTitle'),
-              style: const TextStyle(
-                fontStyle: FontStyle.italic,
-                fontWeight: FontWeight.w800,
-                color: AppTheme.primaryContainer,
-              ),
-            ),
-          ],
+        centerTitle: true,
+        title: Text(
+          l10n.translate('appTitle'),
+          style: TextStyle(
+            fontStyle: FontStyle.italic,
+            fontWeight: FontWeight.w900,
+            color: colorScheme.primaryContainer,
+          ),
         ),
+        // title: Row(
+        //   mainAxisAlignment: MainAxisAlignment.center,
+        //   crossAxisAlignment: CrossAxisAlignment.center,
+        //   children: [
+        //     Icon(Icons.star, color: colorScheme.primaryContainer),
+        //     const SizedBox(width: 8),
+        //     Text(
+        //       l10n.translate('appTitle'),
+        //       style: TextStyle(
+        //         fontStyle: FontStyle.italic,
+        //         fontWeight: FontWeight.w800,
+        //         color: colorScheme.primaryContainer,
+        //       ),
+        //     ),
+        //   ],
+        // ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.settings, color: AppTheme.primary),
-            onPressed: () {},
+            icon: Icon(Icons.settings, color: colorScheme.primary),
+            onPressed: () => Navigator.of(context).pushNamed('/settings'),
           ),
           const SizedBox(width: 8),
         ],
@@ -67,7 +78,7 @@ class HomeScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Ready to create?",
+                          l10n.translate('ready_to_create'),
                           style: Theme.of(context).textTheme.displaySmall
                               ?.copyWith(
                                 color: colorScheme.onPrimaryContainer,
@@ -76,7 +87,7 @@ class HomeScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          "Pick a world and start your colorful adventure today!",
+                          l10n.translate('pick_a_world'),
                           style: TextStyle(
                             color: colorScheme.onPrimaryContainer.withValues(
                               alpha: 0.8,
@@ -122,8 +133,8 @@ class HomeScreen extends StatelessWidget {
               crossAxisSpacing: 16,
               children: [
                 _CategoryCard(
-                  title: "Animals",
-                  subtitle: "Lions, Birds & More",
+                  title: l10n.translate('animalsCategory'),
+                  subtitle: l10n.translate('animalsSubtitle'),
                   icon: Icons.pets,
                   color: colorScheme.secondaryContainer,
                   onTap: () => Navigator.pushNamed(
@@ -133,8 +144,8 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
                 _CategoryCard(
-                  title: "Vehicles",
-                  subtitle: "Cars & Planes",
+                  title: l10n.translate('vehiclesCategory'),
+                  subtitle: l10n.translate('vehiclesSubtitle'),
                   icon: Icons.directions_car,
                   color: colorScheme.tertiaryContainer,
                   onTap: () => Navigator.pushNamed(
@@ -144,8 +155,8 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
                 _CategoryCard(
-                  title: "Space",
-                  subtitle: "Rockets & Stars",
+                  title: l10n.translate('spaceCategory'),
+                  subtitle: l10n.translate('spaceSubtitle'),
                   icon: Icons.rocket_launch,
                   color: Colors.indigo.shade100,
                   onTap: () => Navigator.pushNamed(
@@ -155,8 +166,8 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
                 _CategoryCard(
-                  title: "Shapes",
-                  subtitle: "Circles & Squares",
+                  title: l10n.translate('shapesCategory'),
+                  subtitle: l10n.translate('shapesSubtitle'),
                   icon: Icons.category,
                   color: colorScheme.surfaceVariant,
                   onTap: () => Navigator.pushNamed(
@@ -211,7 +222,11 @@ class _CategoryCard extends StatelessWidget {
                 color: Colors.white,
                 shape: BoxShape.circle,
               ),
-              child: Icon(icon, color: AppTheme.secondary, size: 32),
+              child: Icon(
+                icon,
+                color: Theme.of(context).colorScheme.secondary,
+                size: 32,
+              ),
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,

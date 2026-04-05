@@ -25,6 +25,7 @@ class _DrawingScreenState extends State<DrawingScreen> {
   double _strokeWidth = 10.0;
   double _zoomLevel = 1.0;
   int _pointerCount = 0;
+  bool _isDrawingMode = true; // Toggle between draw and pan mode
 
   @override
   void initState() {
@@ -44,7 +45,7 @@ class _DrawingScreenState extends State<DrawingScreen> {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: AppTheme.surfaceContainerLow,
+      backgroundColor: colorScheme.surface.withValues(alpha: 0.5),
       appBar: AppBar(
         backgroundColor: Colors.white.withValues(alpha: 0.8),
         elevation: 0,
@@ -52,40 +53,41 @@ class _DrawingScreenState extends State<DrawingScreen> {
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(32)),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppTheme.primary),
+          icon: Icon(Icons.arrow_back, color: colorScheme.primary),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text(
-          l10n.translate('appTitle'),
-          style: const TextStyle(
-            fontStyle: FontStyle.italic,
-            fontWeight: FontWeight.w900,
-            color: AppTheme.primaryContainer,
-          ),
-        ),
+        title: Image.asset('assets/icon/icon.png', width: 50, height: 50),
+        // Text(
+        //   l10n.translate('appTitle'),
+        //   style: TextStyle(
+        //     fontStyle: FontStyle.italic,
+        //     fontWeight: FontWeight.w900,
+        //     color: colorScheme.primaryContainer,
+        //   ),
+        // ),
         actions: [
-          Tooltip(
-            message: l10n.translate('undo'),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: ElevatedButton.icon(
-                onPressed: _undo,
-                icon: const Icon(Icons.undo, size: 20),
-                label: Text(
-                  l10n.translate('undo'),
-                  style: const TextStyle(fontSize: 12),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 8,
-                  ),
-                ),
-              ),
-            ),
-          ),
+          // Tooltip(
+          //   message: l10n.translate('undo'),
+          //   child: Padding(
+          //     padding: const EdgeInsets.symmetric(horizontal: 4),
+          //     child: ElevatedButton.icon(
+          //       onPressed: _undo,
+          //       icon: const Icon(Icons.undo, size: 20),
+          //       label: Text(
+          //         l10n.translate('undo'),
+          //         style: const TextStyle(fontSize: 12),
+          //       ),
+          //       style: ElevatedButton.styleFrom(
+          //         backgroundColor: Colors.blue,
+          //         foregroundColor: Colors.white,
+          //         padding: const EdgeInsets.symmetric(
+          //           horizontal: 8,
+          //           vertical: 8,
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          // ),
           // Tooltip(
           //   message: l10n.translate('clear'),
           //   child: Padding(
@@ -120,7 +122,7 @@ class _DrawingScreenState extends State<DrawingScreen> {
                   style: const TextStyle(fontSize: 12),
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTheme.tertiary,
+                  backgroundColor: colorScheme.tertiary,
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 8,
@@ -144,7 +146,7 @@ class _DrawingScreenState extends State<DrawingScreen> {
               children: [
                 IconButton(
                   onPressed: _zoomOut,
-                  icon: const Icon(Icons.zoom_out, color: AppTheme.primary),
+                  icon: Icon(Icons.zoom_out, color: colorScheme.primary),
                   tooltip: 'Zoom Out',
                 ),
                 Text(
@@ -156,7 +158,7 @@ class _DrawingScreenState extends State<DrawingScreen> {
                 ),
                 IconButton(
                   onPressed: _zoomIn,
-                  icon: const Icon(Icons.zoom_in, color: AppTheme.primary),
+                  icon: Icon(Icons.zoom_in, color: colorScheme.primary),
                   tooltip: 'Zoom In',
                 ),
                 const SizedBox(width: 16),
@@ -194,12 +196,60 @@ class _DrawingScreenState extends State<DrawingScreen> {
                         Positioned.fill(
                           child: CustomPaint(painter: GridPainter()),
                         ),
+                        // Pan hint when zoomed in pan mode only
+                        if (_zoomLevel > 1.01 && !_isDrawingMode)
+                          Positioned(
+                            top: 20,
+                            left: 0,
+                            right: 0,
+                            child: Center(
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 10,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.black87,
+                                  borderRadius: BorderRadius.circular(20),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withValues(
+                                        alpha: 0.3,
+                                      ),
+                                      blurRadius: 8,
+                                    ),
+                                  ],
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Icon(
+                                      Icons.pan_tool,
+                                      color: Colors.white,
+                                      size: 18,
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      l10n.translate('pan_mode'),
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
                         // The interactive drawing area with zoom
                         InteractiveViewer(
                           transformationController: _transformationController,
                           minScale: 1.0,
                           maxScale: 3.0,
-                          boundaryMargin: const EdgeInsets.all(20),
+                          boundaryMargin: const EdgeInsets.all(100),
+                          panEnabled: !_isDrawingMode,
+                          scaleEnabled: false,
                           onInteractionEnd: (details) {
                             final scale = _transformationController.value
                                 .getMaxScaleOnAxis();
@@ -209,89 +259,86 @@ class _DrawingScreenState extends State<DrawingScreen> {
                           },
                           child: Listener(
                             onPointerDown: (event) {
+                              if (!_isDrawingMode) {
+                                return; // Disable drawing when in pan mode
+                              }
                               _pointerCount++;
+                              // Use local position directly - no transformation needed
+                              // Both Listener and CustomPaint are in InteractiveViewer's space
+                              setState(() {
+                                _points.add(
+                                  DrawingPoint(
+                                    offset: event.localPosition,
+                                    paint: Paint()
+                                      ..color = _selectedColor
+                                      ..isAntiAlias = true
+                                      ..strokeWidth = _strokeWidth
+                                      ..strokeCap = StrokeCap.round,
+                                  ),
+                                );
+                              });
+                            },
+                            onPointerMove: (event) {
+                              if (!_isDrawingMode) {
+                                return; // Disable drawing when in pan mode
+                              }
+                              if (_pointerCount == 1) {
+                                // Use local position directly - no transformation needed
+                                setState(() {
+                                  _points.add(
+                                    DrawingPoint(
+                                      offset: event.localPosition,
+                                      paint: Paint()
+                                        ..color = _selectedColor
+                                        ..isAntiAlias = true
+                                        ..strokeWidth = _strokeWidth
+                                        ..strokeCap = StrokeCap.round,
+                                    ),
+                                  );
+                                });
+                              }
                             },
                             onPointerUp: (event) {
+                              if (!_isDrawingMode) {
+                                return; // Ignore when in pan mode
+                              }
                               _pointerCount--;
                               if (_pointerCount == 0) {
                                 _points.add(null);
                               }
                             },
                             onPointerCancel: (event) {
+                              if (!_isDrawingMode) {
+                                return; // Ignore when in pan mode
+                              }
                               _pointerCount--;
                               if (_pointerCount == 0) {
                                 _points.add(null);
                               }
                             },
-                            child: GestureDetector(
-                              onPanStart: (details) {
-                                // Allow drawing only when not zoomed (at 100%)
-                                // When zoomed, 1-finger panning is handled by InteractiveViewer
-                                if (_pointerCount == 1 && _zoomLevel <= 1.01) {
-                                  final transformedOffset =
-                                      _getTransformedOffset(
-                                        details.localPosition,
-                                      );
-                                  setState(() {
-                                    _points.add(
-                                      DrawingPoint(
-                                        offset: transformedOffset,
-                                        paint: Paint()
-                                          ..color = _selectedColor
-                                          ..isAntiAlias = true
-                                          ..strokeWidth = _strokeWidth
-                                          ..strokeCap = StrokeCap.round,
-                                      ),
-                                    );
-                                  });
-                                }
-                              },
-                              onPanUpdate: (details) {
-                                // Allow drawing only when not zoomed (at 100%)
-                                // When zoomed, 1-finger panning is handled by InteractiveViewer
-                                if (_pointerCount == 1 && _zoomLevel <= 1.01) {
-                                  final transformedOffset =
-                                      _getTransformedOffset(
-                                        details.localPosition,
-                                      );
-                                  setState(() {
-                                    _points.add(
-                                      DrawingPoint(
-                                        offset: transformedOffset,
-                                        paint: Paint()
-                                          ..color = _selectedColor
-                                          ..isAntiAlias = true
-                                          ..strokeWidth = _strokeWidth
-                                          ..strokeCap = StrokeCap.round,
-                                      ),
-                                    );
-                                  });
-                                }
-                              },
-                              child: Stack(
-                                children: [
-                                  CustomPaint(
-                                    painter: DrawingPainter(points: _points),
-                                    size: Size.infinite,
-                                  ),
-                                  // The outline image
-                                  Center(
-                                    child: IgnorePointer(
-                                      child: Opacity(
-                                        opacity: 0.8,
-                                        child: SvgPicture.asset(
-                                          widget.shape.imageUrl,
-                                          fit: BoxFit.contain,
-                                          colorFilter: const ColorFilter.mode(
-                                            Colors.black,
-                                            BlendMode.srcIn,
-                                          ),
+                            child: Stack(
+                              children: [
+                                CustomPaint(
+                                  painter: DrawingPainter(points: _points),
+                                  size: Size.infinite,
+                                ),
+                                // The outline image
+                                Center(
+                                  child: IgnorePointer(
+                                    child: Opacity(
+                                      opacity: 0.8,
+                                      child: SvgPicture.asset(
+                                        widget.shape.imageUrl,
+                                        fit: BoxFit.contain,
+                                        colorFilter: const ColorFilter.mode(
+                                          Colors.black,
+                                          BlendMode.srcIn,
                                         ),
                                       ),
                                     ),
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
@@ -309,12 +356,17 @@ class _DrawingScreenState extends State<DrawingScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _ToolButton(icon: Icons.brush, isActive: true, onTap: () {}),
+                _ToolButton(
+                  icon: Icons.brush,
+                  isActive: _isDrawingMode,
+                  onTap: _toggleDrawingMode,
+                  tooltip: _isDrawingMode ? 'Drawing Mode' : 'Pan Mode',
+                ),
                 const SizedBox(width: 16),
                 _ToolButton(
-                  icon: Icons.format_paint,
+                  icon: Icons.undo,
                   isActive: false,
-                  onTap: () {},
+                  onTap: () => setState(() => _undo()),
                 ),
                 const SizedBox(width: 16),
                 _ToolButton(
@@ -340,8 +392,29 @@ class _DrawingScreenState extends State<DrawingScreen> {
                         fontSize: 18,
                       ),
                     ),
-                    const SizedBox(width: 8),
-                    const Icon(Icons.palette, color: AppTheme.primary),
+                    const SizedBox(width: 15),
+                    // const Icon(Icons.palette, color: AppTheme.primary),
+
+                    // Current color indicator
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        color: _selectedColor,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: Colors.grey.shade300,
+                          width: 2,
+                        ),
+                      ),
+                      child: const Icon(
+                        Icons.palette,
+                        color: Colors.white,
+                        size: 20,
+                      ),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 16),
@@ -414,23 +487,51 @@ class _DrawingScreenState extends State<DrawingScreen> {
   }
 
   void _zoomIn() {
+    final newZoom = (_zoomLevel + 0.2).clamp(1.0, 3.0);
     setState(() {
-      _zoomLevel = (_zoomLevel + 0.2).clamp(1.0, 3.0);
-      _transformationController.value = Matrix4.identity()..scale(_zoomLevel);
+      _zoomLevel = newZoom;
+      // Auto-switch to pan mode when zooming in
+      if (newZoom > 1.01) {
+        _isDrawingMode = false;
+      }
     });
+    // Apply transformation with proper zooming centered
+    final scale = newZoom;
+    _transformationController.value = Matrix4.identity()
+      ..translate(0.5, 0.5, 0)
+      ..scale(scale, scale, 1)
+      ..translate(-0.5, -0.5, 0);
   }
 
   void _zoomOut() {
+    final newZoom = (_zoomLevel - 0.2).clamp(1.0, 3.0);
     setState(() {
-      _zoomLevel = (_zoomLevel - 0.2).clamp(1.0, 3.0);
-      _transformationController.value = Matrix4.identity()..scale(_zoomLevel);
+      _zoomLevel = newZoom;
+      // Auto-switch to drawing mode when zoomed out to 100%
+      if (newZoom == 1.0) {
+        _isDrawingMode = true;
+      }
     });
+    // Apply transformation with proper zooming centered
+    final scale = newZoom;
+    _transformationController.value = Matrix4.identity()
+      ..translate(0.5, 0.5, 0)
+      ..scale(scale, scale, 1)
+      ..translate(-0.5, -0.5, 0);
   }
 
   void _resetZoom() {
     _transformationController.value = Matrix4.identity();
     setState(() {
       _zoomLevel = 1.0;
+      // Reset to drawing mode when zooming out completely
+      _isDrawingMode = true;
+    });
+  }
+
+  void _toggleDrawingMode() {
+    setState(() {
+      _isDrawingMode = !_isDrawingMode;
     });
   }
 
@@ -498,9 +599,18 @@ class _DrawingScreenState extends State<DrawingScreen> {
       final image = await _screenshotController.capture();
       if (image != null) {
         final directory = await getApplicationDocumentsDirectory();
+
+        // Create directory if it doesn't exist
+        final saveDir = Directory(directory.path);
+        if (!await saveDir.exists()) {
+          await saveDir.create(recursive: true);
+        }
+
         final imagePath =
             '${directory.path}/drawing_${DateTime.now().millisecondsSinceEpoch}.png';
         final imageFile = File(imagePath);
+
+        // Write the image file
         await imageFile.writeAsBytes(image);
 
         if (mounted) {
@@ -521,31 +631,36 @@ class _ToolButton extends StatelessWidget {
   final IconData icon;
   final bool isActive;
   final VoidCallback onTap;
+  final String? tooltip;
 
   const _ToolButton({
     required this.icon,
     required this.isActive,
     required this.onTap,
+    this.tooltip,
   });
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        width: 50,
-        height: 50,
-        decoration: BoxDecoration(
-          color: isActive
-              ? AppTheme.primaryContainer
-              : AppTheme.surfaceContainerHighest,
-          shape: BoxShape.circle,
-        ),
-        child: Icon(
-          icon,
-          color: isActive
-              ? AppTheme.onPrimaryContainer
-              : AppTheme.onSurfaceVariant,
+    return Tooltip(
+      message: tooltip ?? '',
+      child: InkWell(
+        onTap: onTap,
+        child: Container(
+          width: 50,
+          height: 50,
+          decoration: BoxDecoration(
+            color: isActive
+                ? AppTheme.primaryContainer
+                : AppTheme.surfaceContainerHighest,
+            shape: BoxShape.circle,
+          ),
+          child: Icon(
+            icon,
+            color: isActive
+                ? AppTheme.onPrimaryContainer
+                : AppTheme.onSurfaceVariant,
+          ),
         ),
       ),
     );

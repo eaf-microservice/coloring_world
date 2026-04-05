@@ -35,8 +35,8 @@ String _getImageUrl(String id) {
 }
 
 final List<ColoringShape> sampleShapes = [
-  // Animals - 100 designs
-  ...List.generate(100, (index) {
+  // Animals - 25 designs
+  ...List.generate(25, (index) {
     final animalNames = [
       'dog',
       'cat',
@@ -63,33 +63,8 @@ final List<ColoringShape> sampleShapes = [
       'frog',
       'butterfly',
       'bee',
-      'ant',
-      'ladybug',
-      'spider',
-      'dragon',
-      'unicorn',
-      'horse',
-      'sheep',
-      'pig',
-      'cow',
-      'chicken',
-      'duck',
-      'goose',
-      'eagle',
-      'owl',
-      'parrot',
-      'fish',
-      'octopus',
-      'crab',
-      'starfish',
-      'jellyfish',
-      'seahorse',
-      'hamster',
-      'rabbit',
-      'squirrel',
-      'hedgehog',
     ];
-    final name = animalNames[index % animalNames.length];
+    final name = animalNames[index];
     return ColoringShape(
       id: 'animal_$index',
       nameKey: name,
@@ -98,8 +73,8 @@ final List<ColoringShape> sampleShapes = [
     );
   }),
 
-  // Vehicles - 100 designs
-  ...List.generate(100, (index) {
+  // Vehicles - 25 designs
+  ...List.generate(25, (index) {
     final vehicleNames = [
       'car',
       'truck',
@@ -121,38 +96,13 @@ final List<ColoringShape> sampleShapes = [
       'jeep',
       'scooter',
       'skateboard',
-      'roller_skates',
       'motorcycle',
       'tractor',
       'excavator',
       'bulldozer',
       'crane',
-      'dump_truck',
-      'garbage_truck',
-      'camper',
-      'rv',
-      'sailboat',
-      'speedboat',
-      'ferry',
-      'yacht',
-      'sailship',
-      'hot_air_balloon',
-      'blimp',
-      'hang_glider',
-      'glider',
-      'parachute',
-      'space_shuttle',
-      'fighter_jet',
-      'cargo_plane',
-      'private_plane',
-      'seaplane',
-      'hovercraft',
-      'jet_ski',
-      'canoe',
-      'surfboard',
-      'skateboard',
     ];
-    final name = vehicleNames[index % vehicleNames.length];
+    final name = vehicleNames[index];
     return ColoringShape(
       id: 'vehicle_$index',
       nameKey: name,
@@ -161,8 +111,8 @@ final List<ColoringShape> sampleShapes = [
     );
   }),
 
-  // Space - 100 designs
-  ...List.generate(100, (index) {
+  // Space - 25 designs
+  ...List.generate(25, (index) {
     final spaceNames = [
       'rocket',
       'ufo',
@@ -189,33 +139,8 @@ final List<ColoringShape> sampleShapes = [
       'lunar_module',
       'rover',
       'spacesuit',
-      'helmet',
-      'oxygen_tank',
-      'landing_pod',
-      'cargo_ship',
-      'fighter_spacecraft',
-      'asteroid_belt',
-      'meteor_shower',
-      'solar_flare',
-      'eclipse',
-      'milky_way',
-      'orion',
-      'venus',
-      'mercury',
-      'neptune',
-      'uranus',
-      'comet_halley',
-      'space_probe',
-      'space_telescope',
-      'solar_panel',
-      'antenna',
-      'communication_satellite',
-      'asteroid_mining_ship',
-      'space_colony',
-      'moon_base',
-      'mars_rover',
     ];
-    final name = spaceNames[index % spaceNames.length];
+    final name = spaceNames[index];
     return ColoringShape(
       id: 'space_$index',
       nameKey: name,
@@ -224,8 +149,8 @@ final List<ColoringShape> sampleShapes = [
     );
   }),
 
-  // Shapes - 100 designs
-  ...List.generate(100, (index) {
+  // Shapes - 25 designs
+  ...List.generate(25, (index) {
     final shapeNames = [
       'circle',
       'square',
@@ -252,33 +177,8 @@ final List<ColoringShape> sampleShapes = [
       'parallelogram',
       'rhombus',
       'kite',
-      'semicircle',
-      'quarter_circle',
-      'arc',
-      'leaf',
-      'flower',
-      'snowflake',
-      'sun_shape',
-      'cloud',
-      'raindrop',
-      'wave',
-      'zigzag',
-      'checkerboard',
-      'houndstooth',
-      'honeycomb',
-      'mandala',
-      'starburst',
-      'target',
-      'concentric_circles',
-      'interlocking_rings',
-      'yin_yang',
-      'trefoil',
-      'celtic_knot',
-      'kaleidoscope',
-      'tessellation',
-      'fractal',
     ];
-    final name = shapeNames[index % shapeNames.length];
+    final name = shapeNames[index];
     return ColoringShape(
       id: 'shape_$index',
       nameKey: name,
