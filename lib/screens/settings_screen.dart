@@ -308,7 +308,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Future<void> _showAboutMe() async {
     await AboutMe(
       applicationName: AppLocalizations.of(context)!.translate('appTitle'),
-      version: '0.0.2',
+      version: '0.0.3',
       logo: Image.asset('assets/icon/icon.png', width: 100, height: 100),
       description: AppLocalizations.of(context)!.translate('appDescription'),
     ).showCustomAbout(context);

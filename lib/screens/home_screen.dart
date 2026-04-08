@@ -187,17 +187,17 @@ class HomeScreen extends StatelessWidget {
                     arguments: 'vehicles',
                   ),
                 ),
-                _CategoryCard(
-                  title: l10n.translate('spaceCategory'),
-                  subtitle: l10n.translate('spaceSubtitle'),
-                  icon: Icons.rocket_launch,
-                  color: Colors.indigo.shade100,
-                  onTap: () => Navigator.pushNamed(
-                    context,
-                    '/gallery',
-                    arguments: 'space',
-                  ),
-                ),
+                // _CategoryCard(
+                //   title: l10n.translate('spaceCategory'),
+                //   subtitle: l10n.translate('spaceSubtitle'),
+                //   icon: Icons.rocket_launch,
+                //   color: Colors.indigo.shade100,
+                //   onTap: () => Navigator.pushNamed(
+                //     context,
+                //     '/gallery',
+                //     arguments: 'space',
+                //   ),
+                // ),
                 _CategoryCard(
                   title: l10n.translate('shapesCategory'),
                   subtitle: l10n.translate('shapesSubtitle'),

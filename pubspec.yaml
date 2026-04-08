@@ -2,7 +2,7 @@ name: coloring
 description: "An app for children for coloring and share her dessin"
 publish_to: 'none'
 
-version: 0.0.2+2
+version: 0.0.3+3
 
 environment:
   sdk: ^3.11.1
@@ -38,7 +38,6 @@ flutter:
   uses-material-design: true
   assets:
     - assets/icon/
-    - assets/images/
     - assets/designs/animals/
     - assets/designs/vehicles/
     - assets/designs/space/
