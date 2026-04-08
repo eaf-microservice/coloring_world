@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
-import '../theme.dart';
 
 class SuccessScreen extends StatelessWidget {
   final String imagePath;

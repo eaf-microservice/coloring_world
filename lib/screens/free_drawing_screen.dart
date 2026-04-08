@@ -18,7 +18,7 @@ class _FreeDrawingScreenState extends State<FreeDrawingScreen> {
   final ScreenshotController _screenshotController = ScreenshotController();
   final GlobalKey _canvasKey = GlobalKey();
   Color _selectedColor = Colors.blue;
-  List<DrawingPoint?> _points = [];
+  final List<DrawingPoint?> _points = [];
   double _strokeWidth = 12.0;
   double _zoomLevel = 1.0;
   late TransformationController _transformationController;
@@ -441,8 +441,9 @@ class _FreeDrawingScreenState extends State<FreeDrawingScreen> {
                           },
                           child: Listener(
                             onPointerDown: (event) {
-                              if (!_isDrawingMode)
+                              if (!_isDrawingMode) {
                                 return; // Disable drawing when in pan mode
+                              }
                               _pointerCount++;
                               // Use local position directly - no transformation needed
                               setState(() {
@@ -459,8 +460,9 @@ class _FreeDrawingScreenState extends State<FreeDrawingScreen> {
                               });
                             },
                             onPointerMove: (event) {
-                              if (!_isDrawingMode)
+                              if (!_isDrawingMode) {
                                 return; // Disable drawing when in pan mode
+                              }
                               // Draw while not zoomed
                               if (_pointerCount == 1) {
                                 // Use local position directly - no transformation needed
@@ -479,16 +481,18 @@ class _FreeDrawingScreenState extends State<FreeDrawingScreen> {
                               }
                             },
                             onPointerUp: (event) {
-                              if (!_isDrawingMode)
+                              if (!_isDrawingMode) {
                                 return; // Ignore when in pan mode
+                              }
                               _pointerCount--;
                               if (_pointerCount == 0) {
                                 _points.add(null);
                               }
                             },
                             onPointerCancel: (event) {
-                              if (!_isDrawingMode)
+                              if (!_isDrawingMode) {
                                 return; // Ignore when in pan mode
+                              }
                               _pointerCount--;
                               if (_pointerCount == 0) {
                                 _points.add(null);

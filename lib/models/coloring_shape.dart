@@ -16,11 +16,11 @@ class ColoringShape {
 String _getImageUrl(String id) {
   if (id.startsWith('animal')) {
     final index = int.parse(id.split('_')[1]);
-    final designIndex = index % 25;
+    final designIndex = index % 35;
     return 'assets/designs/animals/animals_$designIndex.svg';
   } else if (id.startsWith('vehicle')) {
     final index = int.parse(id.split('_')[1]);
-    final designIndex = index % 25;
+    final designIndex = index % 35;
     return 'assets/designs/vehicles/vehicles_$designIndex.svg';
   } else if (id.startsWith('space')) {
     final index = int.parse(id.split('_')[1]);
@@ -44,8 +44,8 @@ String _getImageUrl(String id) {
 }
 
 final List<ColoringShape> sampleShapes = [
-  // Animals - 25 designs
-  ...List.generate(25, (index) {
+  // Animals - 35 designs
+  ...List.generate(35, (index) {
     final animalNames = [
       'dog',
       'cat',
@@ -92,8 +92,8 @@ final List<ColoringShape> sampleShapes = [
     );
   }),
 
-  // Vehicles - 25 designs
-  ...List.generate(25, (index) {
+  // Vehicles - 35 designs
+  ...List.generate(35, (index) {
     final vehicleNames = [
       'car',
       'truck',
@@ -106,6 +106,7 @@ final List<ColoringShape> sampleShapes = [
       'ship',
       'submarine',
       'rocket',
+      'roller_skates',
       'ambulance',
       'police_car',
       'fire_truck',

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
-import '../theme.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

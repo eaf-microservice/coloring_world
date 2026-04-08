@@ -21,8 +21,8 @@ class _DrawingScreenState extends State<DrawingScreen> {
   final ScreenshotController _screenshotController = ScreenshotController();
   late TransformationController _transformationController;
   Color _selectedColor = Colors.yellow;
-  List<DrawingPoint?> _points = [];
-  double _strokeWidth = 10.0;
+  final List<DrawingPoint?> _points = [];
+  final double _strokeWidth = 10.0;
   double _zoomLevel = 1.0;
   int _pointerCount = 0;
   bool _isDrawingMode = true; // Toggle between draw and pan mode

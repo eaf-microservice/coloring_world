@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../l10n/app_localizations.dart';
 import '../models/coloring_shape.dart';
-import '../theme.dart';
 
 class GalleryScreen extends StatefulWidget {
   final String? category;
@@ -106,13 +105,13 @@ class _GalleryScreenState extends State<GalleryScreen> {
                       setState(() => selectedCategory = 'vehicles');
                     },
                   ),
-                  _CategoryTab(
-                    label: l10n.translate('spaceCategory'),
-                    isSelected: selectedCategory == 'space',
-                    onTap: () {
-                      setState(() => selectedCategory = 'space');
-                    },
-                  ),
+                  // _CategoryTab(
+                  //   label: l10n.translate('spaceCategory'),
+                  //   isSelected: selectedCategory == 'space',
+                  //   onTap: () {
+                  //     setState(() => selectedCategory = 'space');
+                  //   },
+                  // ),
                   _CategoryTab(
                     label: l10n.translate('shapesCategory'),
                     isSelected: selectedCategory == 'shapes',

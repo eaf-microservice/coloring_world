@@ -2,7 +2,6 @@ import 'package:coloring/widgets/about.dart';
 import 'package:flutter/material.dart';
 import '../app_state.dart';
 import '../l10n/app_localizations.dart';
-import '../theme.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
